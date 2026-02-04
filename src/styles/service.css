@@ -1,0 +1,38 @@
+.service-page {
+  min-height: calc(100vh - 200px);
+}
+
+.service-page section {
+  scroll-margin-top: 100px;
+}
+
+/* Service Hero Section with Background Image */
+.service-hero-section {
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+}
+
+.service-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  z-index: 1;
+}
+
+.service-detailed-content {
+  margin-top: 32px;
+  text-align: left;
+}
+
+.service-detailed-content p {
+  text-indent: 0;
+}
