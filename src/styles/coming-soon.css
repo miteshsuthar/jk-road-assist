@@ -14,15 +14,15 @@
 }
 
 .coming-soon-page__rocket {
-  width: 80px;
-  height: 80px;
+  width: clamp(60px, 15vw, 80px);
+  height: clamp(60px, 15vw, 80px);
   margin: 0 auto 1.5rem;
   display: block;
   object-fit: contain;
 }
 
 .coming-soon-page__heading {
-  font-size: clamp(1.75rem, 5vw, 2.25rem);
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
   font-weight: 700;
   color: #1e293b;
   margin-bottom: 0.75rem;

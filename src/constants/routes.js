@@ -1,10 +1,7 @@
 export const COMING_SOON_PATHS = [
   "/login",
-  "/services",
   "/premium-cars",
-  "/rsa-services",
   "/roadside-package",
-  "/about",
   "/team",
   "/gallery",
 ];

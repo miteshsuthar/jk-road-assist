@@ -1,4 +1,427 @@
-/* Header specific styles */
-header {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* ========================================
+   TOP BAR
+   ======================================== */
+.header-topbar {
+  background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 100%);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  padding: 8px 0;
+  position: relative;
+  z-index: 51;
+}
+
+.topbar-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.85);
+  transition: color 0.2s ease;
+  font-size: 13px;
+}
+
+.topbar-link:hover {
+  color: #fbbf24;
+}
+
+.topbar-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #6ee7b7;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.topbar-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  animation: topbarPulse 2s ease-in-out infinite;
+}
+
+@keyframes topbarPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+
+/* ========================================
+   MAIN HEADER
+   ======================================== */
+.header-main {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.98);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.header-scrolled {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+  border-bottom-color: transparent;
+}
+
+/* ========================================
+   LOGO
+   ======================================== */
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.header-logo-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.header-logo:hover .header-logo-img {
+  transform: scale(1.05);
+}
+
+.header-logo-text {
+  display: block;
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.header-logo-tagline {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* ========================================
+   NAVIGATION LINKS
+   ======================================== */
+.nav-link {
+  position: relative;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #475569;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+.nav-link:hover {
+  color: #1e40af;
+  background: rgba(37, 99, 235, 0.06);
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 20px;
+  height: 2px;
+  background: #2563eb;
+  border-radius: 1px;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover::after,
+.nav-link-active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.nav-link-active {
+  color: #1e40af;
+  font-weight: 600;
+}
+
+/* ========================================
+   HEADER PHONE & CTA
+   ======================================== */
+.header-phone {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e40af;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+.header-phone:hover {
+  background: rgba(37, 99, 235, 0.06);
+}
+
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 22px;
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 10px rgba(220, 38, 38, 0.3);
+  letter-spacing: 0.2px;
+}
+
+.header-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.4);
+  background: linear-gradient(135deg, #b91c1c, #dc2626);
+}
+
+/* ========================================
+   HAMBURGER MENU BUTTON
+   ======================================== */
+.header-hamburger {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.header-hamburger:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.hamburger-lines {
+  width: 22px;
+  height: 16px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hamburger-lines span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #1e293b;
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.hamburger-open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.hamburger-open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ========================================
+   MOBILE MENU
+   ======================================== */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 49;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-menu-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-menu-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 80px 24px 40px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mobile-nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1e293b;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.mobile-menu-open .mobile-nav-link {
+  animation: mobileNavSlideIn 0.4s ease-out both;
+}
+
+@keyframes mobileNavSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link-active {
+  background: rgba(37, 99, 235, 0.06);
+  color: #1e40af;
+}
+
+.mobile-nav-link-active {
+  font-weight: 600;
+}
+
+.mobile-menu-actions {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.mobile-call-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  background: #0f172a;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.mobile-call-btn:hover {
+  background: #1e293b;
+}
+
+.mobile-help-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 12px;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(220, 38, 38, 0.3);
+}
+
+.mobile-help-btn:hover {
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.4);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 640px) {
+  .header-topbar {
+    font-size: 12px;
+    padding: 6px 0;
+  }
+
+  .topbar-badge {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+
+  .header-logo-img {
+    width: 38px;
+    height: 38px;
+  }
+
+  .header-logo-text {
+    font-size: 16px;
+  }
+
+  .header-logo-tagline {
+    font-size: 10px;
+  }
+
+  .mobile-nav-link {
+    padding: 14px 16px;
+    font-size: 16px;
+  }
+
+  .mobile-menu-inner {
+    padding: 70px 20px 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-logo-img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .header-logo-text {
+    font-size: 15px;
+  }
+
+  .header-cta {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
 }

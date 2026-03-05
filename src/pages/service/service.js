@@ -1,375 +1,347 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SERVICE_DATA } from "../../constants/services";
 import "../../styles/service.css";
-import "../../styles/coming-soon.css";
 
+/* ========================================
+   SCROLL ANIMATION HOOK
+   ======================================== */
+const useScrollReveal = () => {
+  const ref = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.unobserve(el); } },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  return [ref, isVisible];
+};
+
+/* ========================================
+   FAQ ACCORDION ITEM
+   ======================================== */
+const FaqItem = ({ question, answer, isOpen, onClick, index, isVisible }) => (
+  <div
+    className={`faq-item ${isOpen ? "faq-item-open" : ""} ${isVisible ? "visible" : ""}`}
+    style={{ transitionDelay: `${index * 80}ms` }}
+  >
+    <button className="faq-question" onClick={onClick} aria-expanded={isOpen}>
+      <span>{question}</span>
+      <svg
+        className={`faq-chevron ${isOpen ? "faq-chevron-open" : ""}`}
+        width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
+    <div className={`faq-answer ${isOpen ? "faq-answer-open" : ""}`}>
+      <p>{answer}</p>
+    </div>
+  </div>
+);
+
+/* ========================================
+   FEATURE ICON COMPONENT
+   ======================================== */
+const FeatureIcon = ({ type }) => {
+  const icons = {
+    clock: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />,
+    speed: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />,
+    tool: <><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></>,
+    check: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />,
+    car: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7h12l2 5h-1a3 3 0 110 0H9a3 3 0 110 0H7V7zm0 0V5a2 2 0 00-2-2H4" />,
+    price: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />,
+  };
+  return (
+    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      {icons[type] || icons.check}
+    </svg>
+  );
+};
+
+/* ========================================
+   MAIN SERVICE PAGE
+   ======================================== */
 const Service = () => {
   const { serviceName } = useParams();
   const service = SERVICE_DATA[serviceName];
+  const [openFaq, setOpenFaq] = useState(null);
+
+  const [overviewRef, overviewVisible] = useScrollReveal();
+  const [featuresRef, featuresVisible] = useScrollReveal();
+  const [processRef, processVisible] = useScrollReveal();
+  const [faqRef, faqVisible] = useScrollReveal();
+  const [relatedRef, relatedVisible] = useScrollReveal();
+  const [ctaRef, ctaVisible] = useScrollReveal();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.documentElement.scrollTo(0, 0);
-    document.body.scrollTo(0, 0);
+    setOpenFaq(null);
   }, [serviceName]);
 
   const formatServiceName = (name) => {
     if (!name) return "Service";
-    return name
-      .split("-")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+    return name.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   };
 
+  /* Coming Soon fallback */
   if (!service) {
     const serviceTitle = formatServiceName(serviceName);
     return (
-      <div className="coming-soon-page">
-        <div className="bg-gray-100 py-8">
-          <div className="container mx-auto px-4">
-            <nav className="text-sm text-gray-600 mb-4">
-              <Link to="/" className="hover:text-blue-600">
-                Home
-              </Link>
-              <span className="mx-2">/</span>
-              <Link to="/services" className="hover:text-blue-600">
-                Services
-              </Link>
-              <span className="mx-2">/</span>
-              <span className="text-gray-900">{serviceTitle}</span>
+      <div className="svc-page">
+        <div className="svc-hero" style={{ background: "linear-gradient(135deg, #0f172a, #1e3a8a)" }}>
+          <div className="svc-hero-overlay" />
+          <div className="container-custom relative z-10">
+            <nav className="svc-breadcrumb">
+              <Link to="/">Home</Link>
+              <span>/</span>
+              <Link to="/services">Services</Link>
+              <span>/</span>
+              <span>{serviceTitle}</span>
             </nav>
-          </div>
-        </div>
-
-        <section className="py-20 bg-gradient-to-br from-blue-50 to-gray-100">
-          <div className="container mx-auto px-4">
-            <div className="max-w-2xl mx-auto text-center">
-              <div className="mb-8">
-                <div className="inline-block p-6 bg-blue-100 rounded-full mb-6">
-                  <svg
-                    className="w-24 h-24 text-blue-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-              </div>
-
-              <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-4">
-                Coming Soon
-              </h1>
-              <h2 className="text-2xl md:text-3xl font-semibold text-blue-600 mb-6">
-                {serviceTitle} Service
-              </h2>
-              <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-                We're working hard to bring you this service. Our team is preparing
-                something amazing for you. Stay tuned!
-              </p>
-
-              <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4">
-                  What to Expect
-                </h3>
-                <ul className="text-left space-y-3 text-gray-700">
-                  <li className="flex items-start">
-                    <svg
-                      className="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span>Professional and reliable service</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg
-                      className="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span>24/7 availability for your convenience</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg
-                      className="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span>Expert technicians at your service</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg
-                      className="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span>Quick response time</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  to="/"
-                  className="bg-blue-600 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-blue-700 transition-colors"
-                >
-                  Back to Home
-                </Link>
-                <Link
-                  to="/contact"
-                  className="bg-gray-600 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-gray-700 transition-colors"
-                >
-                  Contact Us
-                </Link>
-              </div>
-
-              <div className="mt-12 pt-8 border-t border-gray-300">
-                <p className="text-gray-600 mb-4">
-                  Need immediate assistance? Call us now!
-                </p>
-                <a
-                  href="tel:+919929983644"
-                  className="inline-flex items-center text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors"
-                >
-                  <svg
-                    className="w-6 h-6 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                    />
-                  </svg>
-                  +91-9929983644
+            <div className="svc-hero-content">
+              <h1 className="svc-hero-title">{serviceTitle} — Coming Soon</h1>
+              <p className="svc-hero-desc">We're preparing this service. In the meantime, call us for immediate help.</p>
+              <div className="svc-hero-actions">
+                <a href="tel:+918955836514" className="svc-btn-primary">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                  Call: +91-8955836514
                 </a>
+                <Link to="/" className="svc-btn-outline">Back to Home</Link>
               </div>
             </div>
           </div>
-        </section>
+        </div>
       </div>
     );
   }
 
+  const relatedServices = (service.relatedServices || [])
+    .map((slug) => SERVICE_DATA[slug])
+    .filter(Boolean);
+
   return (
-    <div className="service-page">
-      {/* Breadcrumbs */}
-      <div className="bg-gray-100 py-2">
-        <div className="container mx-auto px-4">
-          <nav className="text-sm text-gray-600">
-            <Link to="/" className="hover:text-blue-600">
-              Home
-            </Link>
-            <span className="mx-2">/</span>
-            <span className="text-gray-900">{service.title}</span>
-          </nav>
-        </div>
-      </div>
-
-      {/* Hero Section */}
-      <section 
-        className="service-hero-section text-white py-16 relative"
-        style={{
-          backgroundImage: service.image ? `url(${service.image})` : 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
+    <div className="svc-page">
+      {/* ========================================
+          HERO SECTION
+          ======================================== */}
+      <section
+        className="svc-hero"
+        style={{ backgroundImage: `url(${service.heroImage || service.image})` }}
       >
-        <div className="service-hero-overlay"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="text-6xl mb-6">{service.icon}</div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              {service.heroTitle}
-            </h1>
-            <p className="text-xl md:text-2xl text-blue-100">
-              {service.heroDescription}
-            </p>
-          </div>
-        </div>
-      </section>
+        <div className="svc-hero-overlay" />
+        <div className="container-custom relative z-10">
+          <nav className="svc-breadcrumb">
+            <Link to="/">Home</Link>
+            <span>/</span>
+            <Link to="/services">Services</Link>
+            <span>/</span>
+            <span>{service.title}</span>
+          </nav>
 
-      {/* Overview Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-              Service Overview
-            </h2>
-            <p className="text-lg text-gray-700 leading-relaxed text-center mb-8">
-              {service.overview}
-            </p>
-            {service.detailedContent && (
-              <div className="service-detailed-content">
-                {service.detailedContent.split("\n\n").map((paragraph, index) => (
-                  <p key={index} className="text-base text-gray-700 leading-relaxed mb-4">
-                    {paragraph}
-                  </p>
+          <div className="svc-hero-content">
+            <span className="svc-hero-badge">
+              <span className="svc-hero-badge-dot" />
+              24/7 Available
+            </span>
+            <h1 className="svc-hero-title">{service.heroTitle}</h1>
+            <p className="svc-hero-subtitle">{service.heroSubtitle}</p>
+            <p className="svc-hero-desc">{service.heroDescription}</p>
+
+            {/* Quick Stats */}
+            {service.quickStats && (
+              <div className="svc-hero-stats">
+                {service.quickStats.map((stat, i) => (
+                  <div key={i} className="svc-hero-stat">
+                    <div className="svc-hero-stat-value">
+                      {stat.value}<span className="svc-hero-stat-unit">{stat.unit}</span>
+                    </div>
+                    <div className="svc-hero-stat-label">{stat.label}</div>
+                  </div>
                 ))}
               </div>
             )}
+
+            <div className="svc-hero-actions">
+              <a href="tel:+918955836514" className="svc-btn-primary">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                Call Now
+              </a>
+              <Link to="/contact" className="svc-btn-outline">Book This Service</Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-800 mb-12 text-center">
-              Why Choose Our {service.title}?
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {service.features.map((feature, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
-                >
-                  <div className="flex items-start">
-                    <svg
-                      className="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <p className="text-gray-700 text-lg">{feature}</p>
-                  </div>
-                </div>
+      {/* ========================================
+          OVERVIEW SECTION
+          ======================================== */}
+      <section className="svc-overview section-padding" ref={overviewRef}>
+        <div className="container-custom">
+          <div className={`svc-overview-grid ${overviewVisible ? "visible" : ""}`}>
+            <div className="svc-overview-image">
+              <img
+                src={service.overview.image}
+                alt={service.title}
+                loading="lazy"
+              />
+            </div>
+            <div className="svc-overview-text">
+              <span className="section-badge">Overview</span>
+              <h2 className="svc-section-title">{service.overview.title}</h2>
+              {service.overview.paragraphs.map((p, i) => (
+                <p key={i} className="svc-overview-para">{p}</p>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Process Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-800 mb-12 text-center">
-              How It Works
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {service.process.map((step, index) => (
-                <div
-                  key={index}
-                  className="bg-blue-50 rounded-lg p-6 text-center hover:bg-blue-100 transition-colors"
-                >
-                  <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">
-                    {step.step}
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-gray-600">{step.description}</p>
+      {/* ========================================
+          FEATURES SECTION
+          ======================================== */}
+      <section className="svc-features section-padding bg-gray-50" ref={featuresRef}>
+        <div className="container-custom">
+          <div className={`section-header ${featuresVisible ? "visible" : ""}`}>
+            <span className="section-badge">Why Choose Us</span>
+            <h2 className="section-title text-gray-900">Why Choose Our {service.title}?</h2>
+          </div>
+          <div className="svc-features-grid">
+            {service.features.map((feature, index) => (
+              <div
+                key={index}
+                className={`svc-feature-card ${featuresVisible ? "visible" : ""}`}
+                style={{ transitionDelay: `${index * 80}ms` }}
+              >
+                <div className="svc-feature-icon">
+                  <FeatureIcon type={feature.icon} />
                 </div>
+                <h3 className="svc-feature-title">{feature.title}</h3>
+                <p className="svc-feature-desc">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================
+          HOW IT WORKS
+          ======================================== */}
+      <section className="svc-process section-padding" ref={processRef}>
+        <div className="container-custom">
+          <div className={`section-header ${processVisible ? "visible" : ""}`}>
+            <span className="section-badge section-badge-light">Simple Process</span>
+            <h2 className="section-title text-white">How It Works</h2>
+          </div>
+          <div className="svc-process-grid">
+            {service.process.map((step, index) => (
+              <div
+                key={index}
+                className={`svc-process-card ${processVisible ? "visible" : ""}`}
+                style={{ transitionDelay: `${index * 120}ms` }}
+              >
+                <div className="svc-process-step">{step.step}</div>
+                <h3 className="svc-process-title">{step.title}</h3>
+                <p className="svc-process-desc">{step.description}</p>
+                {index < service.process.length - 1 && <div className="svc-process-connector" />}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ========================================
+          FAQ SECTION
+          ======================================== */}
+      {service.faqs && service.faqs.length > 0 && (
+        <section className="svc-faq section-padding" ref={faqRef}>
+          <div className="container-custom">
+            <div className={`section-header ${faqVisible ? "visible" : ""}`}>
+              <span className="section-badge">FAQ</span>
+              <h2 className="section-title text-gray-900">Frequently Asked Questions</h2>
+            </div>
+            <div className="svc-faq-list">
+              {service.faqs.map((faq, index) => (
+                <FaqItem
+                  key={index}
+                  index={index}
+                  question={faq.question}
+                  answer={faq.answer}
+                  isOpen={openFaq === index}
+                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                  isVisible={faqVisible}
+                />
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Benefits Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">
-              Key Benefits
-            </h2>
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <ul className="space-y-4">
-                {service.benefits.map((benefit, index) => (
-                  <li key={index} className="flex items-start">
-                    <svg
-                      className="w-6 h-6 text-green-600 mr-3 mt-1 flex-shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
-                    <span className="text-gray-700 text-lg">{benefit}</span>
-                  </li>
-                ))}
-              </ul>
+      {/* ========================================
+          RELATED SERVICES
+          ======================================== */}
+      {relatedServices.length > 0 && (
+        <section className="svc-related section-padding bg-gray-50" ref={relatedRef}>
+          <div className="container-custom">
+            <div className={`section-header ${relatedVisible ? "visible" : ""}`}>
+              <span className="section-badge">Explore More</span>
+              <h2 className="section-title text-gray-900">Related Services</h2>
+            </div>
+            <div className="svc-related-grid">
+              {relatedServices.map((rs, index) => (
+                <Link
+                  key={rs.slug}
+                  to={`/services/${rs.slug}`}
+                  className={`svc-related-card ${relatedVisible ? "visible" : ""}`}
+                  style={{ transitionDelay: `${index * 100}ms` }}
+                >
+                  <div className="svc-related-image" style={{ backgroundImage: `url(${rs.image})` }}>
+                    <div className="svc-related-image-overlay" />
+                  </div>
+                  <div className="svc-related-body">
+                    <h3 className="svc-related-title">{rs.title}</h3>
+                    <p className="svc-related-desc">{rs.description}</p>
+                    <span className="svc-related-link">
+                      Learn More
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </span>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Call to Action Section */}
-      <section className="py-16 bg-blue-600 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4">Need {service.title} Right Now?</h2>
-          <p className="text-xl mb-8">
-            Our expert technicians are ready to assist you 24/7
-          </p>
-          <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-            <a
-              href="tel:+919929983644"
-              className="bg-white text-blue-600 px-8 py-3 rounded-md text-lg font-semibold hover:bg-gray-100 transition-colors"
-            >
-              Call Now: +91-9929983644
-            </a>
-            <Link
-              to="/contact"
-              className="bg-green-500 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-green-600 transition-colors"
-            >
-              Contact Us
-            </Link>
+      {/* ========================================
+          CTA SECTION
+          ======================================== */}
+      <section className="svc-cta" ref={ctaRef}>
+        <div className="svc-cta-pattern" />
+        <div className="container-custom relative z-10">
+          <div className={`svc-cta-content ${ctaVisible ? "visible" : ""}`}>
+            <h2 className="svc-cta-title">Need {service.title} Right Now?</h2>
+            <p className="svc-cta-subtitle">
+              Our certified technicians are standing by 24/7. One call gets you back on the road.
+            </p>
+            <div className="svc-cta-actions">
+              <a href="tel:+918955836514" className="svc-cta-btn-primary">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                Call: +91-8955836514
+              </a>
+              <Link to="/contact" className="svc-cta-btn-outline">Book Online</Link>
+            </div>
           </div>
         </div>
       </section>

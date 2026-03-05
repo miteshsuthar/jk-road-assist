@@ -1,0 +1,560 @@
+/* ========================================
+   ABOUT PAGE BASE
+   ======================================== */
+.about-page {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ========================================
+   HERO SECTION
+   ======================================== */
+.about-hero {
+  position: relative;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  background-color: #0f172a;
+  padding: 120px 0 60px;
+}
+
+.about-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.88) 0%,
+    rgba(30, 58, 138, 0.8) 100%
+  );
+}
+
+.about-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 24px;
+}
+
+.about-breadcrumb a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.about-breadcrumb a:hover {
+  color: #ffffff;
+}
+
+.about-breadcrumb span {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.about-breadcrumb span:last-child {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.about-hero-content {
+  max-width: 700px;
+  animation: aboutHeroEnter 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes aboutHeroEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.about-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+
+.about-hero-badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  animation: aboutBadgePulse 2s ease-in-out infinite;
+}
+
+@keyframes aboutBadgePulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+  50% { opacity: 0.8; box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+}
+
+.about-hero-title {
+  font-size: clamp(26px, 5vw, 52px);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.about-hero-subtitle {
+  font-size: clamp(16px, 2.5vw, 20px);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.5;
+}
+
+/* ========================================
+   OUR STORY SECTION
+   ======================================== */
+.about-story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.7s ease-out;
+}
+
+.about-story-grid.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-story-image {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+.about-story-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.about-story-image:hover img {
+  transform: scale(1.03);
+}
+
+.about-section-title {
+  font-size: clamp(20px, 3.5vw, 36px);
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 20px;
+  letter-spacing: -0.5px;
+}
+
+.about-story-para {
+  font-size: 16px;
+  color: #475569;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.about-story-para:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1024px) {
+  .about-story-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .about-story-image {
+    max-height: 400px;
+  }
+}
+
+/* ========================================
+   MISSION / VISION / VALUES SECTION
+   ======================================== */
+.about-mission-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.about-mission-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 36px 28px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f1f5f9;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.about-mission-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-mission-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  border-color: transparent;
+}
+
+.about-mission-icon {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  color: #1e40af;
+  border-radius: 16px;
+  margin: 0 auto 20px;
+  transition: all 0.3s ease;
+}
+
+.about-mission-card:hover .about-mission-icon {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  color: white;
+  transform: scale(1.05);
+}
+
+.about-mission-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 12px;
+}
+
+.about-mission-desc {
+  font-size: 15px;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+@media (max-width: 1024px) {
+  .about-mission-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* ========================================
+   STATS SECTION
+   ======================================== */
+.about-stats-section {
+  position: relative;
+  padding: 80px 0;
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+  overflow: hidden;
+}
+
+.about-stats-section::before {
+  content: "";
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.15), transparent);
+  pointer-events: none;
+}
+
+.about-stats-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image: radial-gradient(circle at 1px 1px, white 1px, transparent 0);
+  background-size: 40px 40px;
+}
+
+.about-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.about-stat-card {
+  padding: 36px 20px;
+  text-align: center;
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s ease-out;
+}
+
+.about-stat-card-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-stat-card:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.about-stat-number {
+  font-size: 36px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+
+.about-stat-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 1024px) {
+  .about-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .about-stat-card:nth-child(3)::after {
+    display: none;
+  }
+  .about-stat-card:nth-child(1),
+  .about-stat-card:nth-child(2),
+  .about-stat-card:nth-child(3) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+@media (max-width: 640px) {
+  .about-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .about-stat-card:nth-child(odd):not(:last-child)::after {
+    display: block;
+  }
+  .about-stat-card:nth-child(even)::after {
+    display: none;
+  }
+  .about-stat-card:nth-child(1),
+  .about-stat-card:nth-child(2),
+  .about-stat-card:nth-child(3),
+  .about-stat-card:nth-child(4) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .about-stat-number {
+    font-size: 28px;
+  }
+  .about-stat-card {
+    padding: 28px 16px;
+  }
+}
+
+/* ========================================
+   WHY CHOOSE US SECTION
+   ======================================== */
+.about-why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.about-why-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f1f5f9;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.about-why-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-why-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  border-color: transparent;
+}
+
+.about-why-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  color: #1e40af;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  transition: all 0.3s ease;
+}
+
+.about-why-card:hover .about-why-icon {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  color: white;
+  transform: scale(1.05);
+}
+
+.about-why-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+.about-why-desc {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+@media (max-width: 1024px) {
+  .about-why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .about-why-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* ========================================
+   TEAM SECTION
+   ======================================== */
+.about-team-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.about-team-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 36px 24px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f1f5f9;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.about-team-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-team-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  border-color: transparent;
+}
+
+.about-team-avatar {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  font-weight: 700;
+  border-radius: 20px;
+  margin: 0 auto 20px;
+  flex-shrink: 0;
+}
+
+.about-team-role {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+.about-team-desc {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .about-team-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .about-team-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - HERO
+   ======================================== */
+@media (max-width: 768px) {
+  .about-hero {
+    min-height: 350px;
+    padding: 100px 0 48px;
+  }
+
+  .about-hero-title {
+    font-size: clamp(28px, 6vw, 40px);
+  }
+}
+
+@media (max-width: 480px) {
+  .about-hero {
+    min-height: 280px;
+    padding: 80px 0 36px;
+  }
+  .about-mission-card {
+    padding: 24px 20px;
+  }
+  .about-why-card {
+    padding: 24px 20px;
+  }
+  .about-team-card {
+    padding: 28px 20px;
+  }
+  .about-team-avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+  }
+  .about-stats-section {
+    padding: 60px 0;
+  }
+  .about-story-grid {
+    gap: 24px;
+  }
+}
