@@ -16,6 +16,8 @@ const Footer = () => {
     { path: "/", label: "Home" },
     { path: "/services", label: "All Services" },
     { path: "/about", label: "About Us" },
+    { path: "/track-service", label: "Track Service" },
+    { path: "/blog", label: "Blog & Tips" },
     { path: "/contact", label: "Contact Us" },
   ];
 
@@ -48,7 +50,7 @@ const Footer = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://www.instagram.com/rj_roadsideasdistance"
+                  href="https://www.instagram.com/rj_roadsideassistance"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="footer-social-link"

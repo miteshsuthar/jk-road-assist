@@ -1,27 +1,31 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import Header from "./components/header/header";
-import Sidebar from "./components/sidebar/sidebar";
 import Footer from "./components/footer/footer";
 import ScrollToTop from "./components/scroll-to-top/scroll-to-top";
 import PageTitle from "./components/page-title/page-title";
 import AppRoutes from "./routes/routes";
+import WhatsAppWidget from "./components/whatsapp-widget/whatsapp-widget";
+import BackToTop from "./components/back-to-top/back-to-top";
 import "./App.css";
 
 function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   return (
     <BrowserRouter>
       <ScrollToTop />
       <PageTitle />
       <div className="App min-h-screen flex flex-col">
         <Header />
-        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
         <main id="main-content" className="flex-grow">
           <AppRoutes />
         </main>
         <Footer />
+
+        {/* WhatsApp Chat Widget */}
+        <WhatsAppWidget />
+
+        {/* Back to Top */}
+        <BackToTop />
 
         {/* Floating Call Button - Mobile */}
         <a
@@ -29,7 +33,7 @@ function App() {
           className="floating-call-btn"
           aria-label="Call for emergency help"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"

@@ -1,48 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import useScrollReveal from "../../hooks/useScrollReveal";
+import useCounter from "../../hooks/useCounter";
 import "../../styles/about.css";
-
-/* ========================================
-   SCROLL ANIMATION HOOK
-   ======================================== */
-const useScrollReveal = () => {
-  const ref = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.unobserve(el); } },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-  return [ref, isVisible];
-};
-
-/* ========================================
-   COUNTER ANIMATION HOOK
-   ======================================== */
-const useCounter = (target, isVisible, duration = 2000) => {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!isVisible) return;
-    let start = 0;
-    const increment = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [isVisible, target, duration]);
-  return count;
-};
 
 /* ========================================
    STAT CARD COMPONENT
@@ -288,7 +248,7 @@ const About = () => {
             <StatCard number={30} suffix=" Min" label="Avg Response Time" isVisible={statsVisible} delay={200} />
             <StatCard number={100} suffix="%" label="Satisfaction Rate" isVisible={statsVisible} delay={300} />
             <StatCard number={4.8} suffix="" label="Customer Rating" isVisible={statsVisible} delay={400} />
-            <StatCard number={50} suffix="+" label="Service Areas" isVisible={statsVisible} delay={500} />
+            <StatCard number={16} suffix="+" label="Service Areas" isVisible={statsVisible} delay={500} />
           </div>
         </div>
       </section>

@@ -1,24 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 import { EMAIL_CONFIG } from "../../constants/email";
+import useScrollReveal from "../../hooks/useScrollReveal";
 import "../../styles/contact.css";
-
-const useScrollReveal = () => {
-  const ref = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); observer.unobserve(el); } },
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-  return [ref, isVisible];
-};
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -151,7 +136,7 @@ const Contact = () => {
             {/* Left - Image & Info */}
             <div className={`contact-left ${formVisible ? "visible" : ""}`}>
               <div className="contact-image-wrapper">
-                <img src="/images/contact-side.jpg" alt="RJ Roadside Assistance" className="contact-side-image" />
+                <img src="/images/contact-side.jpg" alt="RJ Roadside Assistance" className="contact-side-image" loading="lazy" />
                 <div className="contact-image-overlay" />
                 <div className="contact-image-content">
                   <h3 className="contact-image-title">RJ Roadside Assistance</h3>
@@ -249,7 +234,7 @@ const Contact = () => {
 
                   <div className="contact-field">
                     <label htmlFor="contactDetails" className="contact-label">Phone Number <span className="contact-required">*</span></label>
-                    <input type="text" id="contactDetails" name="contactDetails" value={formData.contactDetails} onChange={handleChange} className="contact-input" placeholder="+91 99299 83644" required />
+                    <input type="text" id="contactDetails" name="contactDetails" value={formData.contactDetails} onChange={handleChange} className="contact-input" placeholder="+91 89558 36514" required />
                   </div>
 
                   <div className="contact-field">
@@ -276,6 +261,39 @@ const Contact = () => {
                   </button>
                 </form>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Service Area Map */}
+      <section className="contact-map-section section-padding">
+        <div className="container-custom">
+          <div className="text-center mb-8">
+            <span className="inline-block px-4 py-1.5 bg-blue-50 text-blue-600 text-sm font-semibold rounded-full mb-3">Our Coverage</span>
+            <h2 className="text-3xl font-bold text-gray-900 mb-3">Service Area — Jaipur</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">We cover all major areas across Jaipur and surrounding regions. Our average response time is under 30 minutes.</p>
+          </div>
+          <div className="contact-map-wrapper">
+            <iframe
+              title="RJ Roadside Assistance Service Area - Jaipur"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d113032.64603756744!2d75.71426899338398!3d26.88514167956319!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x396c4adf4c57e281%3A0xce1c63a0cf22e09!2sJaipur%2C%20Rajasthan!5e0!3m2!1sen!2sin!4v1710000000000!5m2!1sen!2sin"
+              width="100%"
+              height="450"
+              style={{ border: 0, borderRadius: '1rem' }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+          <div className="contact-map-areas">
+            <h3 className="text-lg font-bold text-gray-900 mb-4 text-center">Areas We Cover</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-center">
+              {["Mansarovar", "Vaishali Nagar", "Malviya Nagar", "C-Scheme", "MI Road", "Tonk Road",
+                "Jagatpura", "Sanganer", "Ajmer Road", "Sirsi Road", "Gopalpura", "Pratap Nagar",
+                "Sodala", "Raja Park", "Bani Park", "Jhotwara", "Amber Road", "Delhi Road"].map((area) => (
+                <span key={area} className="contact-map-area-tag">{area}</span>
+              ))}
             </div>
           </div>
         </div>

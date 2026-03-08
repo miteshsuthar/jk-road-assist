@@ -1,6 +1,7 @@
 {
   "short_name": "RJ Roadside",
   "name": "RJ Roadside Assistance",
+  "description": "24/7 professional roadside assistance in Jaipur. Battery jumpstart, flat tyre, towing, key lockout & more.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,16 +11,40 @@
     {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
+  "shortcuts": [
+    {
+      "name": "Call for Help",
+      "short_name": "Call Now",
+      "url": "tel:+918955836514",
+      "description": "Call RJ Roadside Assistance for immediate help"
+    },
+    {
+      "name": "All Services",
+      "short_name": "Services",
+      "url": "/services",
+      "description": "View all roadside assistance services and pricing"
+    },
+    {
+      "name": "Contact Us",
+      "short_name": "Contact",
+      "url": "/contact",
+      "description": "Send us a message or find our contact details"
+    }
+  ],
+  "categories": ["auto", "utilities"],
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#1e40af",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary"
 }

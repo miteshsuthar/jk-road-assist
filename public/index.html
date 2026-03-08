@@ -7,8 +7,23 @@
     <meta name="theme-color" content="#1e40af" />
     <meta
       name="description"
-      content="RJ Road Assist - 24/7 Roadside Assistance Service. Fastest roadside aid in India. Emergency car breakdown service, towing, battery jumpstart, flat tyre repair and more."
+      content="RJ Roadside Assistance - 24/7 Roadside Assistance Service in Jaipur. Emergency car breakdown, towing, battery jumpstart, flat tyre repair, key lockout and more. Call +91-8955836514."
     />
+    <meta name="keywords" content="roadside assistance jaipur, car breakdown service, towing service jaipur, battery jumpstart, flat tyre repair, key lockout, emergency breakdown, RJ roadside assistance, 24/7 mechanic jaipur" />
+    <meta name="author" content="RJ Roadside Assistance" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="RJ Roadside Assistance - 24/7 Roadside Help in Jaipur" />
+    <meta property="og:description" content="Professional 24/7 roadside assistance in Jaipur. Battery jumpstart, flat tyre, towing, key lockout & more. Call +91-8955836514." />
+    <meta property="og:image" content="%PUBLIC_URL%/logo192.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="RJ Roadside Assistance - 24/7 Roadside Help in Jaipur" />
+    <meta name="twitter:description" content="Professional 24/7 roadside assistance in Jaipur. Battery jumpstart, flat tyre, towing, key lockout & more. Call +91-8955836514." />
+    <meta name="twitter:image" content="%PUBLIC_URL%/logo192.png" />
+
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -25,19 +40,50 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>RJ Roadside Assistance - 24/7 Roadside Assistance Service</title>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AutoRepair",
+      "name": "RJ Roadside Assistance",
+      "description": "24/7 professional roadside assistance services in Jaipur - battery jumpstart, flat tyre repair, towing, key lockout, emergency breakdown.",
+      "url": "https://rjroadsideassistance.com",
+      "telephone": "+91-8955836514",
+      "email": "rjroadsideassistance95@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Jaipur",
+        "addressRegion": "Rajasthan",
+        "addressCountry": "IN"
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "sameAs": [
+        "https://www.instagram.com/rj_roadsideassistance",
+        "https://wa.me/918955836514"
+      ],
+      "serviceType": ["Battery Jumpstart", "Flat Tyre Repair", "Key Lockout", "Towing Service", "Mechanical Repair", "Emergency Breakdown"],
+      "areaServed": {
+        "@type": "City",
+        "name": "Jaipur"
+      }
+    }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/sw.js");
+        });
+      }
+    </script>
   </body>
 </html>

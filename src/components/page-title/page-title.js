@@ -7,7 +7,11 @@ const PAGE_TITLES = {
   "/rsa-services": "RSA Membership Plans",
   "/about": "About Us",
   "/contact": "Contact Us",
+  "/track-service": "Track Your Service",
   "/login": "Login",
+  "/terms": "Terms & Conditions",
+  "/privacy": "Privacy Policy",
+  "/blog": "Blog & Tips",
 };
 
 const PageTitle = () => {
@@ -16,6 +20,14 @@ const PageTitle = () => {
   useEffect(() => {
     const path = location.pathname;
     let title = PAGE_TITLES[path];
+
+    if (!title && path.startsWith("/blog/")) {
+      const slug = path.split("/blog/")[1];
+      title = slug
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
+    }
 
     if (!title && path.startsWith("/services/")) {
       const serviceName = path.split("/services/")[1];

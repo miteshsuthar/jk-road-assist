@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { Link } from "react-router-dom";
 import {
   CAR_BRANDS,
@@ -9,33 +9,8 @@ import {
   calculatePrice,
   getVehicleTypeLabel,
 } from "../../constants/pricing";
+import useScrollReveal from "../../hooks/useScrollReveal";
 import "../../styles/services.css";
-
-/* ========================================
-   SCROLL ANIMATION HOOK
-   ======================================== */
-const useScrollReveal = () => {
-  const ref = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  return [ref, isVisible];
-};
 
 /* ========================================
    BRAND LOGO COMPONENT
@@ -852,6 +827,13 @@ const ServicesPage = () => {
                 </svg>
                 WhatsApp Us
               </a>
+              <Link to="/track-service" className="sp-cta-btn-whatsapp" style={{ background: 'linear-gradient(135deg, #2563eb, #1d4ed8)' }}>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Track Service
+              </Link>
             </div>
           </div>
         </div>

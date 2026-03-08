@@ -1,59 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
+import useScrollReveal from "../../hooks/useScrollReveal";
+import useCounter from "../../hooks/useCounter";
 import "../../styles/home.css";
-
-/* ========================================
-   SCROLL ANIMATION HOOK
-   ======================================== */
-const useScrollAnimation = () => {
-  const ref = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(element);
-        }
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" }
-    );
-
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
-
-  return [ref, isVisible];
-};
-
-/* ========================================
-   COUNTER ANIMATION HOOK
-   ======================================== */
-const useCounter = (target, isVisible, duration = 2000) => {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!isVisible) return;
-    let start = 0;
-    const increment = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [isVisible, target, duration]);
-
-  return count;
-};
 
 /* ========================================
    STAT CARD COMPONENT
@@ -75,12 +24,12 @@ const StatCard = ({ number, suffix, label, isVisible, delay }) => {
    ======================================== */
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [statsRef, statsVisible] = useScrollAnimation();
-  const [servicesRef, servicesVisible] = useScrollAnimation();
-  const [howItWorksRef, howItWorksVisible] = useScrollAnimation();
-  const [videoRef, videoVisible] = useScrollAnimation();
-  const [testimonialsRef, testimonialsVisible] = useScrollAnimation();
-  const [ctaRef, ctaVisible] = useScrollAnimation();
+  const [statsRef, statsVisible] = useScrollReveal();
+  const [servicesRef, servicesVisible] = useScrollReveal();
+  const [howItWorksRef, howItWorksVisible] = useScrollReveal();
+  const [videoRef, videoVisible] = useScrollReveal();
+  const [testimonialsRef, testimonialsVisible] = useScrollReveal();
+  const [ctaRef, ctaVisible] = useScrollReveal();
 
   const slides = [
     {
@@ -238,20 +187,38 @@ const Home = () => {
   const testimonials = [
     {
       name: "Rajesh Sharma",
-      location: "Jaipur",
+      location: "Mansarovar, Jaipur",
       text: "My car broke down at midnight on the highway. RJ Roadside Assistance reached me within 25 minutes and got my car running. Lifesaver!",
       rating: 5,
     },
     {
       name: "Priya Gupta",
-      location: "Jaipur",
+      location: "Vaishali Nagar, Jaipur",
       text: "Professional service, fair pricing, and extremely quick response. The mechanic was very knowledgeable and fixed my battery issue on the spot.",
       rating: 5,
     },
     {
       name: "Amit Verma",
-      location: "Jaipur",
+      location: "C-Scheme, Jaipur",
       text: "Got locked out of my car at a mall. Called RJ Roadside Assistance and they unlocked my car in 15 minutes without any damage. Highly recommended!",
+      rating: 5,
+    },
+    {
+      name: "Sunita Meena",
+      location: "Tonk Road, Jaipur",
+      text: "Had a flat tyre near Tonk Road at 6 AM. The technician arrived in 20 minutes, changed the tyre, and even checked the pressure on all four tyres. Very thorough!",
+      rating: 5,
+    },
+    {
+      name: "Vikram Singh",
+      location: "Ajmer Road, Jaipur",
+      text: "My car needed towing after an engine issue. They handled everything — from the tow to coordinating with the workshop. Transparent pricing, no surprises.",
+      rating: 5,
+    },
+    {
+      name: "Neha Agarwal",
+      location: "Malviya Nagar, Jaipur",
+      text: "Subscribed to their RSA membership after my first experience. Already used it twice — battery jumpstart and a flat tyre fix. Worth every rupee!",
       rating: 5,
     },
   ];
@@ -310,6 +277,13 @@ const Home = () => {
                   </a>
                   <Link to="/contact" className="hero-btn-outline">
                     Book Service
+                  </Link>
+                  <Link to="/track-service" className="hero-btn-outline" style={{ borderColor: '#22c55e', color: '#22c55e' }}>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Track Service
                   </Link>
                 </div>
               </div>
@@ -451,7 +425,7 @@ const Home = () => {
                 <video
                   className="video-player-new"
                   controls
-                  poster="/images/car-repairig.jpg"
+                  poster="/images/car-repairing.jpg"
                 >
                   <source src="/images/car-service-video.mp4" type="video/mp4" />
                 </video>
@@ -574,6 +548,9 @@ const Home = () => {
               </a>
               <Link to="/contact" className="cta-btn-outline">
                 Book a Service
+              </Link>
+              <Link to="/track-service" className="cta-btn-outline">
+                Track Your Service
               </Link>
             </div>
           </div>
